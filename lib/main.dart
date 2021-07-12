@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:http/http.dart' as http;
 
 //import '/';
 
@@ -80,14 +81,32 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         'https://www.infoescola.com/wp-content/uploads/2017/04/leao-126767138.jpg')),
                 onPressed: () {
                   //player.play('lib/assets/miau.mp3');
-                  setState(() {
-                    a = c1.text;
-                  });
+
+                  getAll();
                 }),
           ),
         ],
       ),
     );
+  }
+
+  Future<String> getAll() async {
+    final data = await http.get(
+        Uri.parse("https://lippe.herokuapp.com/EuEstouAqui2?nome=" + c1.text));
+
+    if (data.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      setState(() {
+        a = data.body;
+      });
+      return a = data.body;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed!!!');
+    }
   }
 }
 
